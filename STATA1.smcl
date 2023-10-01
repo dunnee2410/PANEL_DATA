@@ -1,0 +1,851 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/vuthihanhdung/Desktop/DỮ LIỆU MẢNG/STATA1.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}31 Dec 2022, 17:19:43
+
+{com}. encode COUNTRY, gen(country)
+{err}variable {bf}country{sf} already defined
+{txt}{search r(110):r(110);}
+
+{com}. import excel "/Users/vuthihanhdung/Desktop/DỮ LIỆU MẢNG/DỮ LIỆU.xlsx", sheet("DATA") cellrange(A1:I100) firstrow
+{res}{err}no; data in memory would be lost
+{res}{txt}{search r(4):r(4);}
+
+{com}. import excel "/Users/vuthihanhdung/Desktop/DỮ LIỆU MẢNG/DỮ LIỆU.xlsx", sheet("DATA") cellrange(A1:I100) firstrow
+{res}{err}no; data in memory would be lost
+{res}{txt}{search r(4):r(4);}
+
+{com}. rename Y lnfdi
+{res}{err}variable {bf}lnfdi{sf} already defined
+{txt}{search r(110):r(110);}
+
+{com}. import excel "/Users/vuthihanhdung/Desktop/DỮ LIỆU MẢNG/DỮ LIỆU.xlsx", sheet("DATA") cellrange(A1:I100) firstrow
+{res}{err}no; data in memory would be lost
+{res}{txt}{search r(4):r(4);}
+
+{com}. 
+. import excel "/Users/vuthihanhdung/Desktop/DỮ LIỆU(AutoRecovered).xlsx", sheet("DATA") clear
+{res}
+{com}. encode COUNTRY, gen(country)
+{err}variable {bf}COUNTRY{sf} not found
+{txt}{search r(111):r(111);}
+
+{com}. import excel "/Users/vuthihanhdung/Desktop/DỮ LIỆU MẢNG/DỮ LIỆU.xlsx", sheet("DATA") cellrange(A1:I100) firstrow
+{res}{err}no; data in memory would be lost
+{res}{txt}{search r(4):r(4);}
+
+{com}. 
+. import excel "/Users/vuthihanhdung/Desktop/DỮ LIỆU(AutoRecovered).xlsx", sheet("DATA") firstrow clear
+{res}
+{com}. encode COUNTRY, gen(country)
+
+. xtset country YEAR
+{res}{txt}{col 8}panel variable:  {res}country (strongly balanced)
+{txt}{col 9}time variable:  {res}{col 25}YEAR, 2008 to 2018
+{txt}{col 17}delta:  {res}1 unit
+
+{com}. rename Y lnfdi
+{res}
+{com}. summarize lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}lnfdi {c |}{res}         99    8.511949    1.486091   3.301377   11.32034
+{txt}{space 9}CPI {c |}{res}         99    3.675758    2.015708        1.3        9.3
+{txt}{space 8}OPEN {c |}{res}         99    127.9467    93.74668   .1674176   437.3267
+{txt}{space 2}MARKETSIZE {c |}{res}         99    10.96298     9.26974     6.1332   56.81748
+{txt}{space 1}INFRASTRUCT {c |}{res}         99    33.74882    25.47639        .22   88.16564
+{txt}{hline 13}{c +}{hline 57}
+{space 3}INFLATION {c |}{res}         99    4.356654    4.645613  -1.241718   26.79954
+{txt}{space 4}UNEMPLOY {c |}{res}         99    2.221515    1.642582        .14       7.21
+
+{com}. pwcorr lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY
+
+             {txt}{c |}    lnfdi      CPI     OPEN MARKET~E INFRAS~T INFLAT~N UNEMPLOY
+{hline 13}{c +}{hline 63}
+       lnfdi {c |} {res}  1.0000 
+         {txt}CPI {c |} {res}  0.7184   1.0000 
+        {txt}OPEN {c |} {res}  0.5932   0.8677   1.0000 
+  {txt}MARKETSIZE {c |} {res}  0.1940   0.1167   0.0982   1.0000 
+ {txt}INFRASTRUCT {c |} {res}  0.7130   0.8353   0.7420   0.1941   1.0000 
+   {txt}INFLATION {c |} {res} -0.1596  -0.2862  -0.1688  -0.2517  -0.3512   1.0000 
+    {txt}UNEMPLOY {c |} {res}  0.5459   0.5370   0.2351  -0.2074   0.3895  -0.0890   1.0000 
+
+{com}. reg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY, beta
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        99
+{txt}{hline 13}{c +}{hline 34}   F(6, 92)        = {res}    27.93
+{txt}       Model {c |} {res} 139.730135         6  23.2883558   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 76.6994849        92  .833690054   {txt}R-squared       ={res}    0.6456
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6225
+{txt}       Total {c |} {res}  216.42962        98  2.20846551   {txt}Root MSE        =   {res} .91307
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 67}        Beta
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .0165384{col 26}{space 2} .1535208{col 37}{space 1}    0.11{col 46}{space 3}0.914{col 67}{space 3} .0224324
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0027752{col 26}{space 2} .0025008{col 37}{space 1}    1.11{col 46}{space 3}0.270{col 67}{space 3} .1750702
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0320414{col 26}{space 2} .0111102{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 67}{space 3} .1998637
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0241376{col 26}{space 2} .0068365{col 37}{space 1}    3.53{col 46}{space 3}0.001{col 67}{space 3} .4137968
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0339042{col 26}{space 2} .0221985{col 37}{space 1}    1.53{col 46}{space 3}0.130{col 67}{space 3} .1059866
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}  .345986{col 26}{space 2} .0873865{col 37}{space 1}    3.96{col 46}{space 3}0.000{col 67}{space 3} .3824196
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013866{col 26}{space 2} .2805715{col 37}{space 1}   21.43{col 46}{space 3}0.000{col 67}{space 3}        .
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. reg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY, beta
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        99
+{txt}{hline 13}{c +}{hline 34}   F(6, 92)        = {res}    27.93
+{txt}       Model {c |} {res} 139.730135         6  23.2883558   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 76.6994849        92  .833690054   {txt}R-squared       ={res}    0.6456
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6225
+{txt}       Total {c |} {res}  216.42962        98  2.20846551   {txt}Root MSE        =   {res} .91307
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 67}        Beta
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .0165384{col 26}{space 2} .1535208{col 37}{space 1}    0.11{col 46}{space 3}0.914{col 67}{space 3} .0224324
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0027752{col 26}{space 2} .0025008{col 37}{space 1}    1.11{col 46}{space 3}0.270{col 67}{space 3} .1750702
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0320414{col 26}{space 2} .0111102{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 67}{space 3} .1998637
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0241376{col 26}{space 2} .0068365{col 37}{space 1}    3.53{col 46}{space 3}0.001{col 67}{space 3} .4137968
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0339042{col 26}{space 2} .0221985{col 37}{space 1}    1.53{col 46}{space 3}0.130{col 67}{space 3} .1059866
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}  .345986{col 26}{space 2} .0873865{col 37}{space 1}    3.96{col 46}{space 3}0.000{col 67}{space 3} .3824196
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013866{col 26}{space 2} .2805715{col 37}{space 1}   21.43{col 46}{space 3}0.000{col 67}{space 3}        .
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. reg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        99
+{txt}{hline 13}{c +}{hline 34}   F(6, 92)        = {res}    27.93
+{txt}       Model {c |} {res} 139.730135         6  23.2883558   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 76.6994849        92  .833690054   {txt}R-squared       ={res}    0.6456
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6225
+{txt}       Total {c |} {res}  216.42962        98  2.20846551   {txt}Root MSE        =   {res} .91307
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .0165384{col 26}{space 2} .1535208{col 37}{space 1}    0.11{col 46}{space 3}0.914{col 54}{space 4}-.2883672{col 67}{space 3}  .321444
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0027752{col 26}{space 2} .0025008{col 37}{space 1}    1.11{col 46}{space 3}0.270{col 54}{space 4}-.0021916{col 67}{space 3} .0077421
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0320414{col 26}{space 2} .0111102{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 54}{space 4} .0099755{col 67}{space 3} .0541073
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0241376{col 26}{space 2} .0068365{col 37}{space 1}    3.53{col 46}{space 3}0.001{col 54}{space 4} .0105598{col 67}{space 3} .0377155
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0339042{col 26}{space 2} .0221985{col 37}{space 1}    1.53{col 46}{space 3}0.130{col 54}{space 4} -.010184{col 67}{space 3} .0779924
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}  .345986{col 26}{space 2} .0873865{col 37}{space 1}    3.96{col 46}{space 3}0.000{col 54}{space 4} .1724288{col 67}{space 3} .5195431
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013866{col 26}{space 2} .2805715{col 37}{space 1}   21.43{col 46}{space 3}0.000{col 54}{space 4} 5.456627{col 67}{space 3} 6.571106
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. vif
+
+{txt}    Variable {c |}       VIF       1/VIF  
+{hline 13}{c +}{hline 22}
+{space 9}CPI {c |} {res}    11.26    0.088836
+{txt}{space 8}OPEN {c |} {res}     6.46    0.154772
+{txt}{space 1}INFRASTRUCT {c |} {res}     3.57    0.280437
+{txt}{space 4}UNEMPLOY {c |} {res}     2.42    0.412891
+{txt}{space 3}INFLATION {c |} {res}     1.25    0.799916
+{txt}{space 2}MARKETSIZE {c |} {res}     1.25    0.802041
+{txt}{hline 13}{c +}{hline 22}
+    Mean VIF {c |} {res}     4.37
+
+{com}. reg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY, beta
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        99
+{txt}{hline 13}{c +}{hline 34}   F(6, 92)        = {res}    27.93
+{txt}       Model {c |} {res} 139.730135         6  23.2883558   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 76.6994849        92  .833690054   {txt}R-squared       ={res}    0.6456
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6225
+{txt}       Total {c |} {res}  216.42962        98  2.20846551   {txt}Root MSE        =   {res} .91307
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 67}        Beta
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .0165384{col 26}{space 2} .1535208{col 37}{space 1}    0.11{col 46}{space 3}0.914{col 67}{space 3} .0224324
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0027752{col 26}{space 2} .0025008{col 37}{space 1}    1.11{col 46}{space 3}0.270{col 67}{space 3} .1750702
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0320414{col 26}{space 2} .0111102{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 67}{space 3} .1998637
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0241376{col 26}{space 2} .0068365{col 37}{space 1}    3.53{col 46}{space 3}0.001{col 67}{space 3} .4137968
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0339042{col 26}{space 2} .0221985{col 37}{space 1}    1.53{col 46}{space 3}0.130{col 67}{space 3} .1059866
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}  .345986{col 26}{space 2} .0873865{col 37}{space 1}    3.96{col 46}{space 3}0.000{col 67}{space 3} .3824196
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013866{col 26}{space 2} .2805715{col 37}{space 1}   21.43{col 46}{space 3}0.000{col 67}{space 3}        .
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. estat imtest, white
+
+{txt}White's test for Ho: homoskedasticity
+         against Ha: unrestricted heteroskedasticity
+
+{col 10}chi2({res}27{txt}){col 23}= {res}    31.73
+{col 10}{txt}Prob > chi2  = {res}   0.2421
+
+{txt}Cameron & Trivedi's decomposition of IM-test
+
+{hline 21}{c TT}{hline 29}
+{ralign 20:Source} {c |}       chi2     df      p
+{hline 21}{c +}{hline 29}
+{ralign 20:Heteroskedasticity} {c |}{res}      31.73     27    0.2421
+{txt}{ralign 20:Skewness} {c |}{res}       7.03      6    0.3185
+{txt}{ralign 20:Kurtosis} {c |}{res}       0.73      1    0.3927
+{txt}{hline 21}{c +}{hline 29}
+{ralign 20:Total} {c |}{res}      39.49     34    0.2380
+{txt}{hline 21}{c BT}{hline 29}
+
+{com}. vif
+
+{txt}    Variable {c |}       VIF       1/VIF  
+{hline 13}{c +}{hline 22}
+{space 9}CPI {c |} {res}    11.26    0.088836
+{txt}{space 8}OPEN {c |} {res}     6.46    0.154772
+{txt}{space 1}INFRASTRUCT {c |} {res}     3.57    0.280437
+{txt}{space 4}UNEMPLOY {c |} {res}     2.42    0.412891
+{txt}{space 3}INFLATION {c |} {res}     1.25    0.799916
+{txt}{space 2}MARKETSIZE {c |} {res}     1.25    0.802041
+{txt}{hline 13}{c +}{hline 22}
+    Mean VIF {c |} {res}     4.37
+
+{com}. reg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY, beta
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        99
+{txt}{hline 13}{c +}{hline 34}   F(6, 92)        = {res}    27.93
+{txt}       Model {c |} {res} 139.730135         6  23.2883558   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 76.6994849        92  .833690054   {txt}R-squared       ={res}    0.6456
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6225
+{txt}       Total {c |} {res}  216.42962        98  2.20846551   {txt}Root MSE        =   {res} .91307
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 67}        Beta
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .0165384{col 26}{space 2} .1535208{col 37}{space 1}    0.11{col 46}{space 3}0.914{col 67}{space 3} .0224324
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0027752{col 26}{space 2} .0025008{col 37}{space 1}    1.11{col 46}{space 3}0.270{col 67}{space 3} .1750702
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0320414{col 26}{space 2} .0111102{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 67}{space 3} .1998637
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0241376{col 26}{space 2} .0068365{col 37}{space 1}    3.53{col 46}{space 3}0.001{col 67}{space 3} .4137968
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0339042{col 26}{space 2} .0221985{col 37}{space 1}    1.53{col 46}{space 3}0.130{col 67}{space 3} .1059866
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}  .345986{col 26}{space 2} .0873865{col 37}{space 1}    3.96{col 46}{space 3}0.000{col 67}{space 3} .3824196
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013866{col 26}{space 2} .2805715{col 37}{space 1}   21.43{col 46}{space 3}0.000{col 67}{space 3}        .
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        99
+{txt}Group variable: {res}country                         {txt}Number of groups  = {res}         9
+
+{txt}R-sq:                                           Obs per group:
+     within  = {res}0.1785                                         {txt}min = {res}        11
+{txt}     between = {res}0.7723                                         {txt}avg = {res}      11.0
+{txt}     overall = {res}0.6290                                         {txt}max = {res}        11
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}   105.87
+{txt}corr(u_i, X)   = {res}0{txt} (assumed)                    Prob > chi2       =     {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .2106886{col 26}{space 2} .1658713{col 37}{space 1}    1.27{col 46}{space 3}0.204{col 54}{space 4}-.1144131{col 67}{space 3} .5357903
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0003308{col 26}{space 2} .0026899{col 37}{space 1}   -0.12{col 46}{space 3}0.902{col 54}{space 4}-.0056028{col 67}{space 3} .0049413
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0148785{col 26}{space 2} .0125256{col 37}{space 1}    1.19{col 46}{space 3}0.235{col 54}{space 4}-.0096711{col 67}{space 3} .0394282
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0253532{col 26}{space 2} .0073884{col 37}{space 1}    3.43{col 46}{space 3}0.001{col 54}{space 4} .0108722{col 67}{space 3} .0398342
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0254581{col 26}{space 2} .0204705{col 37}{space 1}    1.24{col 46}{space 3}0.214{col 54}{space 4}-.0146635{col 67}{space 3} .0655796
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2} .1987114{col 26}{space 2} .0937219{col 37}{space 1}    2.12{col 46}{space 3}0.034{col 54}{space 4} .0150199{col 67}{space 3}  .382403
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.208722{col 26}{space 2} .3207989{col 37}{space 1}   19.35{col 46}{space 3}0.000{col 54}{space 4} 5.579968{col 67}{space 3} 6.837476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .20691686
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .09031016{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+
+{com}. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        99
+{txt}Group variable: {res}country{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.3064{col 63}{txt}min{col 67}={col 69}{res}        11
+{txt}     between = {res}0.5659{col 63}{txt}avg{col 67}={col 69}{res}      11.0
+{txt}     overall = {res}0.4980{col 63}{txt}max{col 67}={col 69}{res}        11
+
+{txt}{col 49}F({res}6{txt},{res}84{txt}){col 67}={col 70}{res}     6.18
+{txt}corr(u_i, Xb){col 16}= {res}-0.3838{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .4678301{col 26}{space 2} .2313961{col 37}{space 1}    2.02{col 46}{space 3}0.046{col 54}{space 4} .0076736{col 67}{space 3} .9279867
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0010538{col 26}{space 2} .0042311{col 37}{space 1}   -0.25{col 46}{space 3}0.804{col 54}{space 4}-.0094678{col 67}{space 3} .0073602
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2}-.0285385{col 26}{space 2} .0173482{col 37}{space 1}   -1.65{col 46}{space 3}0.104{col 54}{space 4}-.0630373{col 67}{space 3} .0059602
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0292559{col 26}{space 2} .0088688{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .0116194{col 67}{space 3} .0468924
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0193321{col 26}{space 2} .0175591{col 37}{space 1}    1.10{col 46}{space 3}0.274{col 54}{space 4}-.0155862{col 67}{space 3} .0542503
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}-.1028764{col 26}{space 2} .1499365{col 37}{space 1}   -0.69{col 46}{space 3}0.495{col 54}{space 4}-.4010416{col 67}{space 3} .1952889
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.396983{col 26}{space 2} .8505911{col 37}{space 1}    7.52{col 46}{space 3}0.000{col 54}{space 4} 4.705489{col 67}{space 3} 8.088476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .98235546
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .69113235{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}84{txt}) = {res}11.73{col 62}{txt}Prob > F = {res}0.0000
+
+{com}. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        99
+{txt}Group variable: {res}country{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.3064{col 63}{txt}min{col 67}={col 69}{res}        11
+{txt}     between = {res}0.5659{col 63}{txt}avg{col 67}={col 69}{res}      11.0
+{txt}     overall = {res}0.4980{col 63}{txt}max{col 67}={col 69}{res}        11
+
+{txt}{col 49}F({res}6{txt},{res}84{txt}){col 67}={col 70}{res}     6.18
+{txt}corr(u_i, Xb){col 16}= {res}-0.3838{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .4678301{col 26}{space 2} .2313961{col 37}{space 1}    2.02{col 46}{space 3}0.046{col 54}{space 4} .0076736{col 67}{space 3} .9279867
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0010538{col 26}{space 2} .0042311{col 37}{space 1}   -0.25{col 46}{space 3}0.804{col 54}{space 4}-.0094678{col 67}{space 3} .0073602
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2}-.0285385{col 26}{space 2} .0173482{col 37}{space 1}   -1.65{col 46}{space 3}0.104{col 54}{space 4}-.0630373{col 67}{space 3} .0059602
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0292559{col 26}{space 2} .0088688{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .0116194{col 67}{space 3} .0468924
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0193321{col 26}{space 2} .0175591{col 37}{space 1}    1.10{col 46}{space 3}0.274{col 54}{space 4}-.0155862{col 67}{space 3} .0542503
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}-.1028764{col 26}{space 2} .1499365{col 37}{space 1}   -0.69{col 46}{space 3}0.495{col 54}{space 4}-.4010416{col 67}{space 3} .1952889
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.396983{col 26}{space 2} .8505911{col 37}{space 1}    7.52{col 46}{space 3}0.000{col 54}{space 4} 4.705489{col 67}{space 3} 8.088476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .98235546
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .69113235{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}84{txt}) = {res}11.73{col 62}{txt}Prob > F = {res}0.0000
+
+{com}. estimates store fixed
+
+. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        99
+{txt}Group variable: {res}country                         {txt}Number of groups  = {res}         9
+
+{txt}R-sq:                                           Obs per group:
+     within  = {res}0.1785                                         {txt}min = {res}        11
+{txt}     between = {res}0.7723                                         {txt}avg = {res}      11.0
+{txt}     overall = {res}0.6290                                         {txt}max = {res}        11
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}   105.87
+{txt}corr(u_i, X)   = {res}0{txt} (assumed)                    Prob > chi2       =     {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .2106886{col 26}{space 2} .1658713{col 37}{space 1}    1.27{col 46}{space 3}0.204{col 54}{space 4}-.1144131{col 67}{space 3} .5357903
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0003308{col 26}{space 2} .0026899{col 37}{space 1}   -0.12{col 46}{space 3}0.902{col 54}{space 4}-.0056028{col 67}{space 3} .0049413
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0148785{col 26}{space 2} .0125256{col 37}{space 1}    1.19{col 46}{space 3}0.235{col 54}{space 4}-.0096711{col 67}{space 3} .0394282
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0253532{col 26}{space 2} .0073884{col 37}{space 1}    3.43{col 46}{space 3}0.001{col 54}{space 4} .0108722{col 67}{space 3} .0398342
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0254581{col 26}{space 2} .0204705{col 37}{space 1}    1.24{col 46}{space 3}0.214{col 54}{space 4}-.0146635{col 67}{space 3} .0655796
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2} .1987114{col 26}{space 2} .0937219{col 37}{space 1}    2.12{col 46}{space 3}0.034{col 54}{space 4} .0150199{col 67}{space 3}  .382403
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.208722{col 26}{space 2} .3207989{col 37}{space 1}   19.35{col 46}{space 3}0.000{col 54}{space 4} 5.579968{col 67}{space 3} 6.837476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .20691686
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .09031016{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+
+{com}. estimates store random
+
+. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        99
+{txt}Group variable: {res}country{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.3064{col 63}{txt}min{col 67}={col 69}{res}        11
+{txt}     between = {res}0.5659{col 63}{txt}avg{col 67}={col 69}{res}      11.0
+{txt}     overall = {res}0.4980{col 63}{txt}max{col 67}={col 69}{res}        11
+
+{txt}{col 49}F({res}6{txt},{res}84{txt}){col 67}={col 70}{res}     6.18
+{txt}corr(u_i, Xb){col 16}= {res}-0.3838{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .4678301{col 26}{space 2} .2313961{col 37}{space 1}    2.02{col 46}{space 3}0.046{col 54}{space 4} .0076736{col 67}{space 3} .9279867
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0010538{col 26}{space 2} .0042311{col 37}{space 1}   -0.25{col 46}{space 3}0.804{col 54}{space 4}-.0094678{col 67}{space 3} .0073602
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2}-.0285385{col 26}{space 2} .0173482{col 37}{space 1}   -1.65{col 46}{space 3}0.104{col 54}{space 4}-.0630373{col 67}{space 3} .0059602
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0292559{col 26}{space 2} .0088688{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .0116194{col 67}{space 3} .0468924
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0193321{col 26}{space 2} .0175591{col 37}{space 1}    1.10{col 46}{space 3}0.274{col 54}{space 4}-.0155862{col 67}{space 3} .0542503
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}-.1028764{col 26}{space 2} .1499365{col 37}{space 1}   -0.69{col 46}{space 3}0.495{col 54}{space 4}-.4010416{col 67}{space 3} .1952889
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.396983{col 26}{space 2} .8505911{col 37}{space 1}    7.52{col 46}{space 3}0.000{col 54}{space 4} 4.705489{col 67}{space 3} 8.088476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .98235546
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .69113235{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}84{txt}) = {res}11.73{col 62}{txt}Prob > F = {res}0.0000
+
+{com}. estimates store random
+
+. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        99
+{txt}Group variable: {res}country{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.3064{col 63}{txt}min{col 67}={col 69}{res}        11
+{txt}     between = {res}0.5659{col 63}{txt}avg{col 67}={col 69}{res}      11.0
+{txt}     overall = {res}0.4980{col 63}{txt}max{col 67}={col 69}{res}        11
+
+{txt}{col 49}F({res}6{txt},{res}84{txt}){col 67}={col 70}{res}     6.18
+{txt}corr(u_i, Xb){col 16}= {res}-0.3838{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .4678301{col 26}{space 2} .2313961{col 37}{space 1}    2.02{col 46}{space 3}0.046{col 54}{space 4} .0076736{col 67}{space 3} .9279867
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0010538{col 26}{space 2} .0042311{col 37}{space 1}   -0.25{col 46}{space 3}0.804{col 54}{space 4}-.0094678{col 67}{space 3} .0073602
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2}-.0285385{col 26}{space 2} .0173482{col 37}{space 1}   -1.65{col 46}{space 3}0.104{col 54}{space 4}-.0630373{col 67}{space 3} .0059602
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0292559{col 26}{space 2} .0088688{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .0116194{col 67}{space 3} .0468924
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0193321{col 26}{space 2} .0175591{col 37}{space 1}    1.10{col 46}{space 3}0.274{col 54}{space 4}-.0155862{col 67}{space 3} .0542503
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}-.1028764{col 26}{space 2} .1499365{col 37}{space 1}   -0.69{col 46}{space 3}0.495{col 54}{space 4}-.4010416{col 67}{space 3} .1952889
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.396983{col 26}{space 2} .8505911{col 37}{space 1}    7.52{col 46}{space 3}0.000{col 54}{space 4} 4.705489{col 67}{space 3} 8.088476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .98235546
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .69113235{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}84{txt}) = {res}11.73{col 62}{txt}Prob > F = {res}0.0000
+
+{com}. estimates store fe
+
+. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}        99
+{txt}Group variable: {res}country                         {txt}Number of groups  = {res}         9
+
+{txt}R-sq:                                           Obs per group:
+     within  = {res}0.1785                                         {txt}min = {res}        11
+{txt}     between = {res}0.7723                                         {txt}avg = {res}      11.0
+{txt}     overall = {res}0.6290                                         {txt}max = {res}        11
+
+                                                {txt}Wald chi2({res}6{txt})      =  {res}   105.87
+{txt}corr(u_i, X)   = {res}0{txt} (assumed)                    Prob > chi2       =     {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .2106886{col 26}{space 2} .1658713{col 37}{space 1}    1.27{col 46}{space 3}0.204{col 54}{space 4}-.1144131{col 67}{space 3} .5357903
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0003308{col 26}{space 2} .0026899{col 37}{space 1}   -0.12{col 46}{space 3}0.902{col 54}{space 4}-.0056028{col 67}{space 3} .0049413
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0148785{col 26}{space 2} .0125256{col 37}{space 1}    1.19{col 46}{space 3}0.235{col 54}{space 4}-.0096711{col 67}{space 3} .0394282
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0253532{col 26}{space 2} .0073884{col 37}{space 1}    3.43{col 46}{space 3}0.001{col 54}{space 4} .0108722{col 67}{space 3} .0398342
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0254581{col 26}{space 2} .0204705{col 37}{space 1}    1.24{col 46}{space 3}0.214{col 54}{space 4}-.0146635{col 67}{space 3} .0655796
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2} .1987114{col 26}{space 2} .0937219{col 37}{space 1}    2.12{col 46}{space 3}0.034{col 54}{space 4} .0150199{col 67}{space 3}  .382403
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.208722{col 26}{space 2} .3207989{col 37}{space 1}   19.35{col 46}{space 3}0.000{col 54}{space 4} 5.579968{col 67}{space 3} 6.837476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .20691686
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .09031016{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+
+{com}. estimates store re
+
+. hausman fe re
+
+{txt}{col 18}{hline 4} Coefficients {hline 4}
+{col 14}{c |}{col 21}(b){col 34}(B){col 49}(b-B){col 59}sqrt(diag(V_b-V_B))
+{col 14}{c |}{col 17}     fe     {col 30}     re     {col 46}Difference{col 66}S.E.
+{hline 13}{c +}{hline 64}
+{space 9}CPI {c |}{res}{col 18} .4678301{col 31} .2106886{col 47} .2571415{col 63} .1613409
+{txt}{space 8}OPEN {c |}{res}{col 18}-.0010538{col 31}-.0003308{col 47} -.000723{col 63}  .003266
+{txt}{space 2}MARKETSIZE {c |}{res}{col 18}-.0285385{col 31} .0148785{col 47}-.0434171{col 63} .0120029
+{txt}{space 1}INFRASTRUCT {c |}{res}{col 18} .0292559{col 31} .0253532{col 47} .0039027{col 63} .0049057
+{txt}{space 3}INFLATION {c |}{res}{col 18} .0193321{col 31} .0254581{col 47} -.006126{col 63}        .
+{txt}{space 4}UNEMPLOY {c |}{res}{col 18}-.1028764{col 31} .1987114{col 47}-.3015878{col 63} .1170349
+{txt}{hline 13}{c BT}{hline 64}
+{ralign 78:b = consistent under Ho and Ha; obtained from xtreg}
+{ralign 78:B = inconsistent under Ha, efficient under Ho; obtained from xtreg}
+
+    Test:  Ho:  difference in coefficients not systematic
+
+{ralign 25:chi2({res:6})} = (b-B)'[(V_b-V_B)^(-1)](b-B)
+{col 27}=  {res}     41.41
+{txt}{col 17}Prob>chi2 =  {res}    0.0000
+{txt}{col 17}(V_b-V_B is not positive definite)
+
+{com}. xtserial lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY
+
+{txt}Wooldridge test for autocorrelation in panel data
+H0: no first-order autocorrelation
+{col 5}F(  1,       8) = {res}     2.952
+{txt}{col 12}Prob > F = {res}     0.1241
+
+{com}. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        99
+{txt}Group variable: {res}country{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.3064{col 63}{txt}min{col 67}={col 69}{res}        11
+{txt}     between = {res}0.5659{col 63}{txt}avg{col 67}={col 69}{res}      11.0
+{txt}     overall = {res}0.4980{col 63}{txt}max{col 67}={col 69}{res}        11
+
+{txt}{col 49}F({res}6{txt},{res}84{txt}){col 67}={col 70}{res}     6.18
+{txt}corr(u_i, Xb){col 16}= {res}-0.3838{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .4678301{col 26}{space 2} .2313961{col 37}{space 1}    2.02{col 46}{space 3}0.046{col 54}{space 4} .0076736{col 67}{space 3} .9279867
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0010538{col 26}{space 2} .0042311{col 37}{space 1}   -0.25{col 46}{space 3}0.804{col 54}{space 4}-.0094678{col 67}{space 3} .0073602
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2}-.0285385{col 26}{space 2} .0173482{col 37}{space 1}   -1.65{col 46}{space 3}0.104{col 54}{space 4}-.0630373{col 67}{space 3} .0059602
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0292559{col 26}{space 2} .0088688{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .0116194{col 67}{space 3} .0468924
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0193321{col 26}{space 2} .0175591{col 37}{space 1}    1.10{col 46}{space 3}0.274{col 54}{space 4}-.0155862{col 67}{space 3} .0542503
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}-.1028764{col 26}{space 2} .1499365{col 37}{space 1}   -0.69{col 46}{space 3}0.495{col 54}{space 4}-.4010416{col 67}{space 3} .1952889
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.396983{col 26}{space 2} .8505911{col 37}{space 1}    7.52{col 46}{space 3}0.000{col 54}{space 4} 4.705489{col 67}{space 3} 8.088476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .98235546
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .69113235{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}84{txt}) = {res}11.73{col 62}{txt}Prob > F = {res}0.0000
+
+{com}. ssc install xttest3
+{txt}checking {hilite:xttest3} consistency and verifying not already installed...
+all files already exist and are up to date.
+
+{com}. xttest3
+
+{txt}Modified Wald test for groupwise heteroskedasticity
+in fixed effect regression model
+
+{res}H0: sigma(i)^2 = sigma^2 for all i
+
+{txt}chi2 (9)  =    {res}  484.04
+{txt}Prob>chi2 =    {res}  0.0000
+
+
+{com}. xtgls lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,panels(heteroskedastic)
+
+{txt}Cross-sectional time-series FGLS regression
+
+Coefficients:  {res}generalized least squares
+{txt}Panels:        {res}heteroskedastic
+{txt}Correlation:   {res}no autocorrelation
+
+{txt}Estimated covariances{col 28}= {res}        9{txt}{col 49}Number of obs{col 67}= {res}        99
+{txt}Estimated autocorrelations{col 28}= {res}        0{txt}{col 49}Number of groups{col 67}= {res}         9
+{txt}Estimated coefficients{col 28}= {res}        7{txt}{col 49}Time periods{col 67}=  {res}       11
+{txt}{col 49}Wald chi2({res}6{txt}){col 67}=  {res}   236.84
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2}-.0069815{col 26}{space 2} .1351573{col 37}{space 1}   -0.05{col 46}{space 3}0.959{col 54}{space 4}-.2718849{col 67}{space 3}  .257922
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0030002{col 26}{space 2} .0022299{col 37}{space 1}    1.35{col 46}{space 3}0.178{col 54}{space 4}-.0013703{col 67}{space 3} .0073708
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0231641{col 26}{space 2} .0112279{col 37}{space 1}    2.06{col 46}{space 3}0.039{col 54}{space 4} .0011578{col 67}{space 3} .0451705
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0263177{col 26}{space 2} .0053281{col 37}{space 1}    4.94{col 46}{space 3}0.000{col 54}{space 4} .0158747{col 67}{space 3} .0367607
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0128999{col 26}{space 2} .0158928{col 37}{space 1}    0.81{col 46}{space 3}0.417{col 54}{space 4}-.0182495{col 67}{space 3} .0440493
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2} .2517255{col 26}{space 2} .0901304{col 37}{space 1}    2.79{col 46}{space 3}0.005{col 54}{space 4} .0750731{col 67}{space 3}  .428378
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.433353{col 26}{space 2} .2060682{col 37}{space 1}   31.22{col 46}{space 3}0.000{col 54}{space 4} 6.029467{col 67}{space 3} 6.837239
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. ssc install xtabond2
+{txt}checking {hilite:xtabond2} consistency and verifying not already installed...
+all files already exist and are up to date.
+
+{com}. xtabond2 lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY ,gmm(lnfdi MARKETSIZE) iv(CPI OPEN INFRASTRUCT INFLATION UNEMPLOY) sm
+{res}{txt}Favoring space over speed. To switch, type or click on {stata "mata: mata set matafavor speed, perm"}.
+{res}Warning: Number of instruments may be large relative to number of observations.
+
+{txt}Dynamic panel-data estimation, one-step system GMM
+{hline 78}
+Group variable: {res}country{txt}{col 49}Number of obs      = {res}       99
+{txt}Time variable : {res}YEAR{txt}{col 49}Number of groups   = {res}        9
+{txt}Number of instruments = {res}89{col 49}{txt}Obs per group: min = {res}       11
+{txt}F({res}6{txt}, {res}92{txt}){col 15}= {res}  2881.54{col 64}{txt}avg = {res}    11.00
+{txt}Prob > F{col 15}={res}     0.000{col 64}{txt}max = {res}       11
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2}  .010422{col 26}{space 2} .1101525{col 37}{space 1}    0.09{col 46}{space 3}0.925{col 54}{space 4}-.2083503{col 67}{space 3} .2291944
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}  .002774{col 26}{space 2}  .001787{col 37}{space 1}    1.55{col 46}{space 3}0.124{col 54}{space 4}-.0007751{col 67}{space 3} .0063231
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0323859{col 26}{space 2} .0079259{col 37}{space 1}    4.09{col 46}{space 3}0.000{col 54}{space 4} .0166444{col 67}{space 3} .0481275
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0242012{col 26}{space 2} .0048918{col 37}{space 1}    4.95{col 46}{space 3}0.000{col 54}{space 4} .0144857{col 67}{space 3} .0339167
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0326959{col 26}{space 2} .0161442{col 37}{space 1}    2.03{col 46}{space 3}0.046{col 54}{space 4} .0006321{col 67}{space 3} .0647598
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2} .3561731{col 26}{space 2}  .063403{col 37}{space 1}    5.62{col 46}{space 3}0.000{col 54}{space 4} .2302491{col 67}{space 3}  .482097
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013218{col 26}{space 2} .2011633{col 37}{space 1}   29.89{col 46}{space 3}0.000{col 54}{space 4}  5.61369{col 67}{space 3} 6.412745
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+Instruments for first differences equation
+{col 3}Standard
+{col 5}D.(CPI OPEN INFRASTRUCT INFLATION UNEMPLOY)
+{col 3}GMM-type (missing=0, separate instruments for each period unless collapsed)
+{col 5}L(1/10).(lnfdi MARKETSIZE)
+Instruments for levels equation
+{col 3}Standard
+{col 5}CPI OPEN INFRASTRUCT INFLATION UNEMPLOY
+{col 5}_cons
+{col 3}GMM-type (missing=0, separate instruments for each period unless collapsed)
+{col 5}D.(lnfdi MARKETSIZE)
+{hline 78}
+Arellano-Bond test for AR(1) in first differences:{col 52}z = {res} -2.56{txt}  Pr > z = {res} 0.010
+{txt}Arellano-Bond test for AR(2) in first differences:{col 52}z = {res}  0.14{txt}  Pr > z = {res} 0.886
+{txt}{hline 78}
+Sargan test of overid. restrictions: chi2({res}82{txt}){col 49}={res} 195.55{txt}{col 59}Prob > chi2 = {res} 0.000
+{txt}  (Not robust, but not weakened by many instruments.)
+
+Difference-in-Sargan tests of exogeneity of instrument subsets:
+  GMM instruments for levels
+    Sargan test excluding group:{col 38}chi2({res}70{txt}){col 49}={res}  93.89{txt}{col 59}Prob > chi2 = {res} 0.030
+{txt}    Difference (null H = exogenous):{col 38}chi2({res}12{txt}){col 49}={res} 101.66{txt}{col 59}Prob > chi2 = {res} 0.000
+{txt}  iv(CPI OPEN INFRASTRUCT INFLATION UNEMPLOY)
+    Sargan test excluding group:{col 38}chi2({res}77{txt}){col 49}={res} 177.83{txt}{col 59}Prob > chi2 = {res} 0.000
+{txt}    Difference (null H = exogenous):{col 38}chi2({res}5{txt}){col 49}={res}  17.72{txt}{col 59}Prob > chi2 = {res} 0.003
+
+
+{com}. reg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY, beta
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        99
+{txt}{hline 13}{c +}{hline 34}   F(6, 92)        = {res}    27.93
+{txt}       Model {c |} {res} 139.730135         6  23.2883558   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 76.6994849        92  .833690054   {txt}R-squared       ={res}    0.6456
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6225
+{txt}       Total {c |} {res}  216.42962        98  2.20846551   {txt}Root MSE        =   {res} .91307
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 67}        Beta
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .0165384{col 26}{space 2} .1535208{col 37}{space 1}    0.11{col 46}{space 3}0.914{col 67}{space 3} .0224324
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0027752{col 26}{space 2} .0025008{col 37}{space 1}    1.11{col 46}{space 3}0.270{col 67}{space 3} .1750702
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0320414{col 26}{space 2} .0111102{col 37}{space 1}    2.88{col 46}{space 3}0.005{col 67}{space 3} .1998637
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0241376{col 26}{space 2} .0068365{col 37}{space 1}    3.53{col 46}{space 3}0.001{col 67}{space 3} .4137968
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0339042{col 26}{space 2} .0221985{col 37}{space 1}    1.53{col 46}{space 3}0.130{col 67}{space 3} .1059866
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}  .345986{col 26}{space 2} .0873865{col 37}{space 1}    3.96{col 46}{space 3}0.000{col 67}{space 3} .3824196
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013866{col 26}{space 2} .2805715{col 37}{space 1}   21.43{col 46}{space 3}0.000{col 67}{space 3}        .
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. estimates store pool
+
+. esttab pool fe re , r2 star(* 0.1 ** 0.05 *** 0.01)  brackets nogap compress
+{res}
+{txt}{hline 49}
+{txt}                 (1)          (2)          (3)   
+{txt}               lnfdi        lnfdi        lnfdi   
+{txt}{hline 49}
+{txt}CPI       {res}    0.0165        0.468**      0.211   {txt}
+          {res} {ralign 9:{txt:[}0.11{txt:]}}    {ralign 9:{txt:[}2.02{txt:]}}    {ralign 9:{txt:[}1.27{txt:]}}   {txt}
+{txt}OPEN      {res}   0.00278     -0.00105    -0.000331   {txt}
+          {res} {ralign 9:{txt:[}1.11{txt:]}}    {ralign 9:{txt:[}-0.25{txt:]}}    {ralign 9:{txt:[}-0.12{txt:]}}   {txt}
+{txt}MARKETSIZE{res}    0.0320***   -0.0285       0.0149   {txt}
+          {res} {ralign 9:{txt:[}2.88{txt:]}}    {ralign 9:{txt:[}-1.65{txt:]}}    {ralign 9:{txt:[}1.19{txt:]}}   {txt}
+{txt}INFRASTR~T{res}    0.0241***    0.0293***    0.0254***{txt}
+          {res} {ralign 9:{txt:[}3.53{txt:]}}    {ralign 9:{txt:[}3.30{txt:]}}    {ralign 9:{txt:[}3.43{txt:]}}   {txt}
+{txt}INFLATION {res}    0.0339       0.0193       0.0255   {txt}
+          {res} {ralign 9:{txt:[}1.53{txt:]}}    {ralign 9:{txt:[}1.10{txt:]}}    {ralign 9:{txt:[}1.24{txt:]}}   {txt}
+{txt}UNEMPLOY  {res}     0.346***    -0.103        0.199** {txt}
+          {res} {ralign 9:{txt:[}3.96{txt:]}}    {ralign 9:{txt:[}-0.69{txt:]}}    {ralign 9:{txt:[}2.12{txt:]}}   {txt}
+{txt}_cons     {res}     6.014***     6.397***     6.209***{txt}
+          {res} {ralign 9:{txt:[}21.43{txt:]}}    {ralign 9:{txt:[}7.52{txt:]}}    {ralign 9:{txt:[}19.35{txt:]}}   {txt}
+{txt}{hline 49}
+{txt}N         {res}        99           99           99   {txt}
+{txt}R-sq      {res}     0.646        0.306                {txt}
+{txt}{hline 49}
+{txt}t statistics in brackets
+{txt}* p<0.1, ** p<0.05, *** p<0.01
+
+{com}. ssc install estout, replace
+{txt}checking {hilite:estout} consistency and verifying not already installed...
+all files already exist and are up to date.
+
+{com}. esttab pool fe re , r2 star(* 0.1 ** 0.05 *** 0.01)  brackets nogap compress
+{res}
+{txt}{hline 49}
+{txt}                 (1)          (2)          (3)   
+{txt}               lnfdi        lnfdi        lnfdi   
+{txt}{hline 49}
+{txt}CPI       {res}    0.0165        0.468**      0.211   {txt}
+          {res} {ralign 9:{txt:[}0.11{txt:]}}    {ralign 9:{txt:[}2.02{txt:]}}    {ralign 9:{txt:[}1.27{txt:]}}   {txt}
+{txt}OPEN      {res}   0.00278     -0.00105    -0.000331   {txt}
+          {res} {ralign 9:{txt:[}1.11{txt:]}}    {ralign 9:{txt:[}-0.25{txt:]}}    {ralign 9:{txt:[}-0.12{txt:]}}   {txt}
+{txt}MARKETSIZE{res}    0.0320***   -0.0285       0.0149   {txt}
+          {res} {ralign 9:{txt:[}2.88{txt:]}}    {ralign 9:{txt:[}-1.65{txt:]}}    {ralign 9:{txt:[}1.19{txt:]}}   {txt}
+{txt}INFRASTR~T{res}    0.0241***    0.0293***    0.0254***{txt}
+          {res} {ralign 9:{txt:[}3.53{txt:]}}    {ralign 9:{txt:[}3.30{txt:]}}    {ralign 9:{txt:[}3.43{txt:]}}   {txt}
+{txt}INFLATION {res}    0.0339       0.0193       0.0255   {txt}
+          {res} {ralign 9:{txt:[}1.53{txt:]}}    {ralign 9:{txt:[}1.10{txt:]}}    {ralign 9:{txt:[}1.24{txt:]}}   {txt}
+{txt}UNEMPLOY  {res}     0.346***    -0.103        0.199** {txt}
+          {res} {ralign 9:{txt:[}3.96{txt:]}}    {ralign 9:{txt:[}-0.69{txt:]}}    {ralign 9:{txt:[}2.12{txt:]}}   {txt}
+{txt}_cons     {res}     6.014***     6.397***     6.209***{txt}
+          {res} {ralign 9:{txt:[}21.43{txt:]}}    {ralign 9:{txt:[}7.52{txt:]}}    {ralign 9:{txt:[}19.35{txt:]}}   {txt}
+{txt}{hline 49}
+{txt}N         {res}        99           99           99   {txt}
+{txt}R-sq      {res}     0.646        0.306                {txt}
+{txt}{hline 49}
+{txt}t statistics in brackets
+{txt}* p<0.1, ** p<0.05, *** p<0.01
+
+{com}. xtabond2 lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY ,gmm(lnfdi MARKETSIZE) iv(CPI OPEN INFRASTRUCT INFLATION UNEMPLOY) sm
+{res}{txt}Favoring space over speed. To switch, type or click on {stata "mata: mata set matafavor speed, perm"}.
+{res}Warning: Number of instruments may be large relative to number of observations.
+
+{txt}Dynamic panel-data estimation, one-step system GMM
+{hline 78}
+Group variable: {res}country{txt}{col 49}Number of obs      = {res}       99
+{txt}Time variable : {res}YEAR{txt}{col 49}Number of groups   = {res}        9
+{txt}Number of instruments = {res}89{col 49}{txt}Obs per group: min = {res}       11
+{txt}F({res}6{txt}, {res}92{txt}){col 15}= {res}  2881.54{col 64}{txt}avg = {res}    11.00
+{txt}Prob > F{col 15}={res}     0.000{col 64}{txt}max = {res}       11
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2}  .010422{col 26}{space 2} .1101525{col 37}{space 1}    0.09{col 46}{space 3}0.925{col 54}{space 4}-.2083503{col 67}{space 3} .2291944
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}  .002774{col 26}{space 2}  .001787{col 37}{space 1}    1.55{col 46}{space 3}0.124{col 54}{space 4}-.0007751{col 67}{space 3} .0063231
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0323859{col 26}{space 2} .0079259{col 37}{space 1}    4.09{col 46}{space 3}0.000{col 54}{space 4} .0166444{col 67}{space 3} .0481275
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0242012{col 26}{space 2} .0048918{col 37}{space 1}    4.95{col 46}{space 3}0.000{col 54}{space 4} .0144857{col 67}{space 3} .0339167
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0326959{col 26}{space 2} .0161442{col 37}{space 1}    2.03{col 46}{space 3}0.046{col 54}{space 4} .0006321{col 67}{space 3} .0647598
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2} .3561731{col 26}{space 2}  .063403{col 37}{space 1}    5.62{col 46}{space 3}0.000{col 54}{space 4} .2302491{col 67}{space 3}  .482097
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.013218{col 26}{space 2} .2011633{col 37}{space 1}   29.89{col 46}{space 3}0.000{col 54}{space 4}  5.61369{col 67}{space 3} 6.412745
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+Instruments for first differences equation
+{col 3}Standard
+{col 5}D.(CPI OPEN INFRASTRUCT INFLATION UNEMPLOY)
+{col 3}GMM-type (missing=0, separate instruments for each period unless collapsed)
+{col 5}L(1/10).(lnfdi MARKETSIZE)
+Instruments for levels equation
+{col 3}Standard
+{col 5}CPI OPEN INFRASTRUCT INFLATION UNEMPLOY
+{col 5}_cons
+{col 3}GMM-type (missing=0, separate instruments for each period unless collapsed)
+{col 5}D.(lnfdi MARKETSIZE)
+{hline 78}
+Arellano-Bond test for AR(1) in first differences:{col 52}z = {res} -2.56{txt}  Pr > z = {res} 0.010
+{txt}Arellano-Bond test for AR(2) in first differences:{col 52}z = {res}  0.14{txt}  Pr > z = {res} 0.886
+{txt}{hline 78}
+Sargan test of overid. restrictions: chi2({res}82{txt}){col 49}={res} 195.55{txt}{col 59}Prob > chi2 = {res} 0.000
+{txt}  (Not robust, but not weakened by many instruments.)
+
+Difference-in-Sargan tests of exogeneity of instrument subsets:
+  GMM instruments for levels
+    Sargan test excluding group:{col 38}chi2({res}70{txt}){col 49}={res}  93.89{txt}{col 59}Prob > chi2 = {res} 0.030
+{txt}    Difference (null H = exogenous):{col 38}chi2({res}12{txt}){col 49}={res} 101.66{txt}{col 59}Prob > chi2 = {res} 0.000
+{txt}  iv(CPI OPEN INFRASTRUCT INFLATION UNEMPLOY)
+    Sargan test excluding group:{col 38}chi2({res}77{txt}){col 49}={res} 177.83{txt}{col 59}Prob > chi2 = {res} 0.000
+{txt}    Difference (null H = exogenous):{col 38}chi2({res}5{txt}){col 49}={res}  17.72{txt}{col 59}Prob > chi2 = {res} 0.003
+
+
+{com}. estimates store gmm
+
+. xtgls lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,panels(heteroskedastic)
+
+{txt}Cross-sectional time-series FGLS regression
+
+Coefficients:  {res}generalized least squares
+{txt}Panels:        {res}heteroskedastic
+{txt}Correlation:   {res}no autocorrelation
+
+{txt}Estimated covariances{col 28}= {res}        9{txt}{col 49}Number of obs{col 67}= {res}        99
+{txt}Estimated autocorrelations{col 28}= {res}        0{txt}{col 49}Number of groups{col 67}= {res}         9
+{txt}Estimated coefficients{col 28}= {res}        7{txt}{col 49}Time periods{col 67}=  {res}       11
+{txt}{col 49}Wald chi2({res}6{txt}){col 67}=  {res}   236.84
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2}-.0069815{col 26}{space 2} .1351573{col 37}{space 1}   -0.05{col 46}{space 3}0.959{col 54}{space 4}-.2718849{col 67}{space 3}  .257922
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2} .0030002{col 26}{space 2} .0022299{col 37}{space 1}    1.35{col 46}{space 3}0.178{col 54}{space 4}-.0013703{col 67}{space 3} .0073708
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2} .0231641{col 26}{space 2} .0112279{col 37}{space 1}    2.06{col 46}{space 3}0.039{col 54}{space 4} .0011578{col 67}{space 3} .0451705
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0263177{col 26}{space 2} .0053281{col 37}{space 1}    4.94{col 46}{space 3}0.000{col 54}{space 4} .0158747{col 67}{space 3} .0367607
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0128999{col 26}{space 2} .0158928{col 37}{space 1}    0.81{col 46}{space 3}0.417{col 54}{space 4}-.0182495{col 67}{space 3} .0440493
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2} .2517255{col 26}{space 2} .0901304{col 37}{space 1}    2.79{col 46}{space 3}0.005{col 54}{space 4} .0750731{col 67}{space 3}  .428378
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.433353{col 26}{space 2} .2060682{col 37}{space 1}   31.22{col 46}{space 3}0.000{col 54}{space 4} 6.029467{col 67}{space 3} 6.837239
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. estimates store gls
+
+. esttab pool fe re gls gmm, r2 star(* 0.1 ** 0.05 *** 0.01)  brackets nogap compress
+{res}
+{txt}{hline 75}
+{txt}                 (1)          (2)          (3)          (4)          (5)   
+{txt}               lnfdi        lnfdi        lnfdi        lnfdi        lnfdi   
+{txt}{hline 75}
+{txt}CPI       {res}    0.0165        0.468**      0.211     -0.00698       0.0104   {txt}
+          {res} {ralign 9:{txt:[}0.11{txt:]}}    {ralign 9:{txt:[}2.02{txt:]}}    {ralign 9:{txt:[}1.27{txt:]}}    {ralign 9:{txt:[}-0.05{txt:]}}    {ralign 9:{txt:[}0.09{txt:]}}   {txt}
+{txt}OPEN      {res}   0.00278     -0.00105    -0.000331      0.00300      0.00277   {txt}
+          {res} {ralign 9:{txt:[}1.11{txt:]}}    {ralign 9:{txt:[}-0.25{txt:]}}    {ralign 9:{txt:[}-0.12{txt:]}}    {ralign 9:{txt:[}1.35{txt:]}}    {ralign 9:{txt:[}1.55{txt:]}}   {txt}
+{txt}MARKETSIZE{res}    0.0320***   -0.0285       0.0149       0.0232**     0.0324***{txt}
+          {res} {ralign 9:{txt:[}2.88{txt:]}}    {ralign 9:{txt:[}-1.65{txt:]}}    {ralign 9:{txt:[}1.19{txt:]}}    {ralign 9:{txt:[}2.06{txt:]}}    {ralign 9:{txt:[}4.09{txt:]}}   {txt}
+{txt}INFRASTR~T{res}    0.0241***    0.0293***    0.0254***    0.0263***    0.0242***{txt}
+          {res} {ralign 9:{txt:[}3.53{txt:]}}    {ralign 9:{txt:[}3.30{txt:]}}    {ralign 9:{txt:[}3.43{txt:]}}    {ralign 9:{txt:[}4.94{txt:]}}    {ralign 9:{txt:[}4.95{txt:]}}   {txt}
+{txt}INFLATION {res}    0.0339       0.0193       0.0255       0.0129       0.0327** {txt}
+          {res} {ralign 9:{txt:[}1.53{txt:]}}    {ralign 9:{txt:[}1.10{txt:]}}    {ralign 9:{txt:[}1.24{txt:]}}    {ralign 9:{txt:[}0.81{txt:]}}    {ralign 9:{txt:[}2.03{txt:]}}   {txt}
+{txt}UNEMPLOY  {res}     0.346***    -0.103        0.199**      0.252***     0.356***{txt}
+          {res} {ralign 9:{txt:[}3.96{txt:]}}    {ralign 9:{txt:[}-0.69{txt:]}}    {ralign 9:{txt:[}2.12{txt:]}}    {ralign 9:{txt:[}2.79{txt:]}}    {ralign 9:{txt:[}5.62{txt:]}}   {txt}
+{txt}_cons     {res}     6.014***     6.397***     6.209***     6.433***     6.013***{txt}
+          {res} {ralign 9:{txt:[}21.43{txt:]}}    {ralign 9:{txt:[}7.52{txt:]}}    {ralign 9:{txt:[}19.35{txt:]}}    {ralign 9:{txt:[}31.22{txt:]}}    {ralign 9:{txt:[}29.89{txt:]}}   {txt}
+{txt}{hline 75}
+{txt}N         {res}        99           99           99           99           99   {txt}
+{txt}R-sq      {res}     0.646        0.306                                          {txt}
+{txt}{hline 75}
+{txt}t statistics in brackets
+{txt}* p<0.1, ** p<0.05, *** p<0.01
+
+{com}. hausman fe re
+
+{txt}{col 18}{hline 4} Coefficients {hline 4}
+{col 14}{c |}{col 21}(b){col 34}(B){col 49}(b-B){col 59}sqrt(diag(V_b-V_B))
+{col 14}{c |}{col 17}     fe     {col 30}     re     {col 46}Difference{col 66}S.E.
+{hline 13}{c +}{hline 64}
+{space 9}CPI {c |}{res}{col 18} .4678301{col 31} .2106886{col 47} .2571415{col 63} .1613409
+{txt}{space 8}OPEN {c |}{res}{col 18}-.0010538{col 31}-.0003308{col 47} -.000723{col 63}  .003266
+{txt}{space 2}MARKETSIZE {c |}{res}{col 18}-.0285385{col 31} .0148785{col 47}-.0434171{col 63} .0120029
+{txt}{space 1}INFRASTRUCT {c |}{res}{col 18} .0292559{col 31} .0253532{col 47} .0039027{col 63} .0049057
+{txt}{space 3}INFLATION {c |}{res}{col 18} .0193321{col 31} .0254581{col 47} -.006126{col 63}        .
+{txt}{space 4}UNEMPLOY {c |}{res}{col 18}-.1028764{col 31} .1987114{col 47}-.3015878{col 63} .1170349
+{txt}{hline 13}{c BT}{hline 64}
+{ralign 78:b = consistent under Ho and Ha; obtained from xtreg}
+{ralign 78:B = inconsistent under Ha, efficient under Ho; obtained from xtreg}
+
+    Test:  Ho:  difference in coefficients not systematic
+
+{ralign 25:chi2({res:6})} = (b-B)'[(V_b-V_B)^(-1)](b-B)
+{col 27}=  {res}     41.41
+{txt}{col 17}Prob>chi2 =  {res}    0.0000
+{txt}{col 17}(V_b-V_B is not positive definite)
+
+{com}. xtreg lnfdi CPI OPEN MARKETSIZE INFRASTRUCT INFLATION UNEMPLOY,fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}        99
+{txt}Group variable: {res}country{txt}{col 49}Number of groups{col 67}={col 69}{res}         9
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.3064{col 63}{txt}min{col 67}={col 69}{res}        11
+{txt}     between = {res}0.5659{col 63}{txt}avg{col 67}={col 69}{res}      11.0
+{txt}     overall = {res}0.4980{col 63}{txt}max{col 67}={col 69}{res}        11
+
+{txt}{col 49}F({res}6{txt},{res}84{txt}){col 67}={col 70}{res}     6.18
+{txt}corr(u_i, Xb){col 16}= {res}-0.3838{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       lnfdi{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}CPI {c |}{col 14}{res}{space 2} .4678301{col 26}{space 2} .2313961{col 37}{space 1}    2.02{col 46}{space 3}0.046{col 54}{space 4} .0076736{col 67}{space 3} .9279867
+{txt}{space 8}OPEN {c |}{col 14}{res}{space 2}-.0010538{col 26}{space 2} .0042311{col 37}{space 1}   -0.25{col 46}{space 3}0.804{col 54}{space 4}-.0094678{col 67}{space 3} .0073602
+{txt}{space 2}MARKETSIZE {c |}{col 14}{res}{space 2}-.0285385{col 26}{space 2} .0173482{col 37}{space 1}   -1.65{col 46}{space 3}0.104{col 54}{space 4}-.0630373{col 67}{space 3} .0059602
+{txt}{space 1}INFRASTRUCT {c |}{col 14}{res}{space 2} .0292559{col 26}{space 2} .0088688{col 37}{space 1}    3.30{col 46}{space 3}0.001{col 54}{space 4} .0116194{col 67}{space 3} .0468924
+{txt}{space 3}INFLATION {c |}{col 14}{res}{space 2} .0193321{col 26}{space 2} .0175591{col 37}{space 1}    1.10{col 46}{space 3}0.274{col 54}{space 4}-.0155862{col 67}{space 3} .0542503
+{txt}{space 4}UNEMPLOY {c |}{col 14}{res}{space 2}-.1028764{col 26}{space 2} .1499365{col 37}{space 1}   -0.69{col 46}{space 3}0.495{col 54}{space 4}-.4010416{col 67}{space 3} .1952889
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.396983{col 26}{space 2} .8505911{col 37}{space 1}    7.52{col 46}{space 3}0.000{col 54}{space 4} 4.705489{col 67}{space 3} 8.088476
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .98235546
+     {txt}sigma_e {c |} {res} .65671096
+         {txt}rho {c |} {res} .69113235{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}8{txt}, {res}84{txt}) = {res}11.73{col 62}{txt}Prob > F = {res}0.0000
+
+{com}. log using "/Users/vuthihanhdung/Desktop/DỮ LIỆU MẢNG/STATA1.smcl"
+{err}log file already open
+{txt}{search r(604):r(604);}
+
+{com}. import excel "/Users/vuthihanhdung/Desktop/DỮ LIỆU(AutoRecovered).xlsx", sheet("DATA") clear
+{res}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/vuthihanhdung/Desktop/DỮ LIỆU MẢNG/STATA1.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}31 Dec 2022, 17:24:29
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
